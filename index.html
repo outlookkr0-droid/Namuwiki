@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>프세카 캐릭터 문서 메이커</title>
+<style>
+:root{--bg:#1b1c1f;--pn:#26272c;--tx:#e6e6e8;--mu:#9a9ca3;--ln:#3a3b42;--ac:#f5a623;--hd:#46466b;--in:#2f3036;--c:#ff6699;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:light){:root{--bg:#f4f4f6;--pn:#fff;--tx:#202125;--mu:#666a73;--ln:#d9dadf;--ac:#c77700;--hd:#46466b;--in:#ececf1}}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.7 "Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif}
+.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;display:flex;gap:6px;padding:8px;background:var(--bg);border-bottom:1px solid var(--ln)}
+.tabs button,.btn{font:inherit;font-weight:700;border:0;border-radius:8px;padding:8px 12px;background:var(--in);color:var(--tx);cursor:pointer}
+.tabs button.on{background:var(--c);color:#fff}
+.tabs .sp{flex:1}.tabs{overflow-x:auto}.tabs button{padding:8px 8px;font-size:13px;white-space:nowrap;flex:none}
+main{display:block}
+#ed,#pv{padding:12px;max-width:760px;margin:0 auto}
+body:not(.pvm) #pv{display:none}
+body.pvm #ed{display:none}
+@media(min-width:980px){main{display:grid;grid-template-columns:minmax(420px,34%) 1fr}#ed,#pv{display:block!important;height:calc(100vh - 53px);overflow:auto;max-width:none;margin:0}#ed{border-right:1px solid var(--ln)}#pv{padding:28px 40px}.doc{max-width:900px;margin:0 auto}.doc::after{content:"";display:block;clear:both}.tabs .t{display:none}.tabs{justify-content:flex-end}}
+fieldset{border:1px solid var(--ln);border-radius:10px;margin:0 0 12px;padding:10px;background:var(--pn)}
+legend{font-weight:700;padding:0 6px;color:var(--ac)}
+label{display:block;font-size:12px;color:var(--mu);margin:8px 0 2px}
+input,textarea,select{width:100%;font:inherit;color:var(--tx);background:var(--in);border:1px solid var(--ln);border-radius:6px;padding:7px}
+textarea{min-height:84px;resize:vertical}
+input[type=color]{padding:0;height:36px}
+.row{display:grid;gap:4px;margin-bottom:8px;padding:8px;background:var(--in);border-radius:8px}
+.row input{background:var(--pn)}
+.rm{justify-self:end;font-size:12px;padding:2px 8px}
+:focus-visible{outline:2px solid var(--c);outline-offset:1px}
+/* document */
+.doc{font-size:15px;line-height:1.8}
+.top{background:var(--hd);border-radius:10px;padding:14px;margin-bottom:14px}
+.top small{color:#fff;font-weight:700}.top b{display:block;font-size:22px;color:var(--c);filter:brightness(1.3)}
+.jp{font-size:13px;color:var(--mu)}
+h1.nm{display:inline-block;margin:2px 0 12px;padding:2px 12px;background:var(--hd);color:#fff;font-size:26px;border-left:6px solid var(--c)}
+.fig{text-align:center;margin:8px 0}.fig img{display:block;margin:0 auto;border-radius:10px}
+.ib{background:var(--pn);border-radius:12px;border-bottom:8px solid var(--c);padding:6px 14px;margin:12px 0}
+.ib div{display:flex;justify-content:space-between;gap:12px;padding:7px 0;border-bottom:1px solid var(--ln)}
+.ib div:last-child{border:0}.ib span:first-child{font-weight:700;white-space:nowrap}.ib span:last-child{text-align:right}
+.sw{display:inline-block;width:14px;height:14px;background:var(--c);vertical-align:-2px;margin-right:6px}
+.toc{border:1px solid var(--ln);border-radius:8px;padding:10px 14px;margin:16px 0;background:var(--pn)}
+.toc a{color:var(--tx);text-decoration:none}.toc i{color:var(--ac);font-style:normal;margin-right:6px}
+.toc .l2{margin-left:18px}.toc .l3{margin-left:36px}
+h2,h3{margin:26px 0 10px;border-bottom:1px solid var(--ln);padding-bottom:4px;font-size:22px}
+h3{font-size:18px}h2 i,h3 i{color:var(--ac);font-style:normal;margin-right:6px}
+.q{border-left:6px solid var(--c);background:var(--in);padding:10px 14px;margin:10px 0;border-radius:0 8px 8px 0}
+.q small{display:block;text-align:right;color:var(--mu)}
+.lk{color:var(--ac)}
+.card{border:1px solid var(--ln);border-radius:12px;overflow:hidden;margin:10px 0;background:var(--pn)}
+.card h4{margin:0;padding:8px 12px;background:var(--hd);color:#fff;font-size:14px}
+.card .nmr{padding:8px 12px 0;font-weight:700;color:var(--c)}
+.card p{margin:0;padding:6px 12px;border-top:1px solid var(--ln)}
+.pill{display:inline-block;margin-left:8px;padding:0 10px;border-radius:99px;background:var(--c);color:#fff;font-size:12px;font-weight:700}
+table.t2{width:100%;border-collapse:collapse;font-size:14px}
+.t2 th,.t2 td{border:1px solid var(--ln);padding:6px 8px;text-align:left}.t2 th{background:var(--hd);color:#fff}
+.empty{color:var(--mu);text-align:center;padding:30px}
+details{border:1px solid var(--ln);border-radius:10px;margin:10px 0;background:var(--pn)}summary{cursor:pointer;padding:8px 12px;font-weight:700;background:var(--hd);color:#fff;border-radius:10px}details[open] summary{border-radius:10px 10px 0 0}details>div{padding:10px}
+.vid{aspect-ratio:16/9;width:100%;border:0;border-radius:8px}
+sup a{color:var(--ac);text-decoration:none;font-size:11px}
+.fnl{font-size:13px;color:var(--mu);border-top:1px solid var(--ln);margin-top:24px;padding-top:8px}
+.gal{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px}.gal figure{margin:0;text-align:center;background:var(--pn);border:1px solid var(--ln);border-radius:8px;padding:6px;font-size:13px}.gal img{max-width:100%;max-height:200px}
+.sc{overflow-x:auto}
+.head{display:grid;grid-template-columns:minmax(0,1fr);grid-template-areas:"name" "side" "toc";align-items:start}.head .hn{grid-area:name}.head .side{grid-area:side}.head .toc{grid-area:toc;margin-top:4px}
+@media(min-width:980px){.head{grid-template-columns:minmax(0,1fr) minmax(280px,340px);grid-template-areas:"name side" "toc side";column-gap:28px}}
+.jp ruby rt{font-size:.62em;color:var(--mu)}.jp{line-height:2.1}
+.ib details.old{border:0;background:none;margin:2px 0 0}.ib .old summary{display:block;list-style:none;background:none;color:var(--tx);padding:0;border-radius:0;font-weight:700;cursor:pointer}.ib .old summary::-webkit-details-marker{display:none}.ib .old>div{display:block;border:0;padding:2px 0;text-align:right}
+mark{background:#fff176;color:#222;padding:0 2px;border-radius:3px}
+.tb{position:sticky;top:calc(env(safe-area-inset-top,0px) + 50px);z-index:4;display:flex;gap:4px;flex-wrap:wrap;padding:6px 12px;margin:-12px -12px 10px;background:var(--bg);border-bottom:1px solid var(--ln)}
+.tb .btn{padding:6px 10px}.tb [data-fx=b]{font-weight:900}.tb [data-fx=i]{font-style:italic}.tb [data-fx=u]{text-decoration:underline}.tb [data-fx=s]{text-decoration:line-through}.tb [data-fx=h]{background:#fff176;color:#222}
+.tb input{width:40px;height:34px;padding:0;border:0;background:none}
+@media(min-width:980px){.tb{top:0}}
+</style></head><body>
+<div class="tabs"><button class="t on" id="b1">편집</button><button class="t" id="b2">미리보기</button><span class="sp"></span><button class="btn" id="cp" title="나무위키 문법으로 복사">나무마크</button><button class="btn" id="xc" title="완성된 문서의 HTML 코드를 복사">HTML 복사</button><button class="btn" id="xh" title="완성된 문서를 HTML 파일로 저장">HTML 저장</button><button class="btn" id="rs">초기화</button></div>
+<main><div id="ed"></div><div id="pv"><div class="doc" id="doc"></div></div></main>
+<script>
+const UN={"Leo/need":"#4455dd","MORE MORE JUMP!":"#88dd44","Vivid BAD SQUAD":"#ee1166","원더랜즈×쇼타임":"#ff9900","25시, 나이트 코드에서.":"#884499","VIRTUAL SINGER":"#33ccbb"};
+const INFO=[["gender","성별"],["bd","생일"],["ht","신장"],["sc","학교"],["gr","학년 / 반"],["hb","취미"],["sk","특기"],["dl","싫어하는 것"],["fd","좋아하는 음식"],["fdl","싫어하는 음식"],["cv","성우"]];
+const TREE=[{t:"개요",k:"ov"},{t:"특징",c:[{t:"비주얼",k:"vis"},{t:"성격",k:"per"},{t:"재능",k:"tal"},{t:"기타",k:"e1"}]},{t:"음악 스타일",c:[{t:"보컬",k:"voc"},{t:"댄스",k:"dan"}]},{t:"작중 행적",c:[{t:"메인 스토리",k:"main"},{t:"이벤트 스토리",k:"evt"},{t:"행적 일람표",k:"acts"}]},{t:"인물 관계",k:"rel"},{t:"호칭",k:"nick"},{t:"게임 대사집",k:"lines"},{t:"역대 프로필",k:"prof"},{t:"Live2D",k:"l2d"},{t:"어록",k:"q"},{t:"기타",k:"e2"}];
+const LEAF=[];(function w(a){a.forEach(n=>n.c?w(n.c):LEAF.push(n))})(TREE);
+const LD={rel:[["n","인물 이름"],["a","랭크 5 문구"],["b","랭크 26 문구"],["c","랭크 46 문구"]],nick:[["n","인물"],["x","부르는 호칭"],["y","불리는 호칭"]],acts:[["t","구분 (메인/이벤트/월드링크)"],["n","스토리 제목"],["s","수록곡"],["k","카드 (★3 카드명)"]],lines:[["t","조건 (봄/터치 등)"],["y","연도"],["n","대사"]],prof:[["n","라벨 (1학년 등)"],["i","이미지","img"]],l2d:[["n","라벨 (교복 등)"],["i","이미지","img"]]};
+const blank=k=>Object.fromEntries(LD[k].map(f=>[f[0],""]));
+const DEF={kr:"",jp:"",ro:"",unit:"Vivid BAD SQUAD",color:"#ff6699",img:"",slogan:"",v1:"",v2:"",first:"",imgfit:"contain",imgh:"420",q:""};Object.keys(LD).forEach(k=>DEF[k]=[blank(k)]);
+let S=load();
+function load(){try{const r=localStorage.getItem("pjsk-doc");if(r)return Object.assign(JSON.parse(JSON.stringify(DEF)),JSON.parse(r))}catch(e){}return JSON.parse(JSON.stringify(DEF))}
+function save(){try{localStorage.setItem("pjsk-doc",JSON.stringify(S))}catch(e){}}
+const esc=s=>String(s||"").replace(/[&<>]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[m]));
+let FN=[];const lum=c=>{let h=c.slice(1);if(h.length<6)h=h.replace(/./g,"$&$&");const [r,g,b]=[0,2,4].map(i=>parseInt(h.substr(i,2),16));return .299*r+.587*g+.114*b>150?"#222":"#fff"};const rich=s=>s.replace(/\{\{yt:(.+?)\}\}/g,(m,u)=>yt(u.replace(/&amp;/g,"&"))).replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g,'<a class="lk" href="$2" target="_blank" rel="noopener">$1</a>').replace(/\*\*(.+?)\*\*/g,"<b>$1</b>").replace(/\*(.+?)\*/g,"<i>$1</i>").replace(/__(.+?)__/g,"<u>$1</u>").replace(/~~(.+?)~~/g,"<s>$1</s>").replace(/==(?:\{(#(?:[0-9a-fA-F]{6}|[0-9a-fA-F]{3}))\})?(.+?)==/g,(m,c,t)=>c?`<mark style="background:${c};color:${lum(c)}">${t}</mark>`:`<mark>${t}</mark>`);
+const fmt=s=>esc(s).replace(/\[\*((?:[^\[\]]|\[[^\]]*\]\([^)]*\))+)\]/g,(m,t)=>{FN.push(t);const n=FN.length;return`<sup><a id="r${n}" href="#fn${n}">[${n}]</a></sup>`}).replace(/^[\s\S]*$/,m=>rich(m)).replace(/\[\[(.+?)\]\]/g,'<span class="lk">$1</span>').replace(/\n/g,"<br>");
+const vis=n=>S.all!==false||has(n);const has=n=>n.c?n.c.some(has):LD[n.k]?S[n.k].some(r=>Object.values(r).some(v=>v)):n.k==="ov"?(S.ov||S.slogan||S.v1||S.v2||"").trim():(S[n.k]||"").trim();
+function form(){
+ let h='<div class="tb">'+[["b","B"],["i","I"],["u","U"],["s","S"],["h","형광펜"],["a","링크"],["f","각주"],["v","영상"]].map(([k,l])=>`<button type="button" class="btn" data-fx="${k}">${l}</button>`).join("")+`<input type="color" id="hc" value="${HC}" title="형광펜 색">`+'</div><fieldset><legend>기본 정보</legend>';
+ h+=`<label>한국어 이름</label><input data-k="kr" value="${esc(S.kr)}" placeholder="이름">`;
+ h+=`<label>일본어 이름 (한자 뒤 괄호에 후리가나: 小豆沢(あずさわ) こはね)</label><input data-k="jp" value="${esc(S.jp)}" placeholder="小豆沢(あずさわ) こはね"><label>로마자</label><input data-k="ro" value="${esc(S.ro)}">`;
+ h+=`<label>소속 유닛 (직접 입력)</label><input data-k="unit" list="ul" value="${esc(S.unit)}"><datalist id="ul">${Object.keys(UN).map(u=>`<option value="${esc(u)}">`).join("")}</datalist><label>1인칭 (호칭표)</label><input data-k="first" value="${esc(S.first)}" placeholder="나(私)">`;
+ h+=`<label>이미지 컬러</label><input type="color" data-k="color" value="${S.color}"><label>이미지 컬러 옆 글자 (색 이름 등)</label><input data-k="cn" value="${esc(S.cn)}" placeholder="예: 세리즈">`;
+ h+=`<label>입상 일러스트 (직접 업로드)</label><input type="file" id="fi" accept="image/*"><label>이미지 맞춤</label><select data-k="imgfit"><option value="contain"${S.imgfit!=="cover"?" selected":""}>전체가 보이게 맞춤</option><option value="cover"${S.imgfit==="cover"?" selected":""}>프레임에 꽉 채우기</option></select><label>이미지 높이</label><input type="range" data-k="imgh" min="200" max="720" step="10" value="${S.imgh||420}">`;
+ INFO.forEach(([k,l])=>h+=`<label>${l}</label><input data-k="i_${k}" value="${esc(S["i_"+k])}">${k==="ht"||k==="gr"?`<label>${l} - 진급 이전 (접이식)</label><input data-k="i_${k}o" value="${esc(S["i_"+k+"o"])}" placeholder="예: 1학년 A반">`:""}`);
+ h+='</fieldset><fieldset><legend>문서 본문</legend><div class="mu" style="font-size:12px;color:var(--mu)">입력 칸을 누른 뒤 위 버튼으로 서식을 넣어요. 문법: **굵게** *기울임* __밑줄__ ~~취소선~~ ==형광펜== =={#ffb3d9}색 지정== [글자](주소) [*각주] {{yt:유튜브주소}} [[링크색]]</div>';
+ h+=`<label><input type="checkbox" data-k="all" ${S.all!==false?"checked":""} style="width:auto"> 내용이 없는 항목도 목차에 표시</label><label>개요 인용구 (대표 대사)</label><input data-k="slogan" value="${esc(S.slogan)}"><label>자기소개 영상 (유튜브 주소)</label><input data-k="v1" value="${esc(S.v1)}"><label>이전 자기소개 영상 (접이식)</label><input data-k="v2" value="${esc(S.v2)}">`;
+ LEAF.filter(n=>!LD[n.k]&&n.k!=="q").forEach(n=>h+=`<label>${n.t}</label><textarea data-k="${n.k}">${esc(S[n.k])}</textarea>`);
+ h+=`<label>어록 (한 줄에 “대사 || 출처”)</label><textarea data-k="q">${esc(S.q)}</textarea></fieldset>`;
+ h+='<fieldset><legend>인물 관계 (칭호 문구 3개)</legend>';
+ S.rel.forEach((r,i)=>h+=`<div class="row"><input data-l="rel" data-i="${i}" data-f="n" placeholder="인물 이름" value="${esc(r.n)}"><input data-l="rel" data-i="${i}" data-f="a" placeholder="랭크 5 문구" value="${esc(r.a)}"><input data-l="rel" data-i="${i}" data-f="b" placeholder="랭크 26 문구" value="${esc(r.b)}"><input data-l="rel" data-i="${i}" data-f="c" placeholder="랭크 46 문구" value="${esc(r.c)}"><button class="btn rm" data-rm="rel" data-i="${i}">삭제</button></div>`);
+ h+='<button class="btn" data-add="rel">+ 인물 추가</button></fieldset><fieldset><legend>호칭</legend>';
+ S.nick.forEach((r,i)=>h+=`<div class="row"><input data-l="nick" data-i="${i}" data-f="n" placeholder="인물" value="${esc(r.n)}"><input data-l="nick" data-i="${i}" data-f="x" placeholder="부르는 호칭" value="${esc(r.x)}"><input data-l="nick" data-i="${i}" data-f="y" placeholder="불리는 호칭" value="${esc(r.y)}"><button class="btn rm" data-rm="nick" data-i="${i}">삭제</button></div>`);
+ h+='<button class="btn" data-add="nick">+ 행 추가</button></fieldset>';
+ const TT={acts:"작중 행적 일람표",lines:"게임 대사집",prof:"역대 프로필",l2d:"Live2D"};
+ ["acts","lines","prof","l2d"].forEach(k=>{h+=`<fieldset><legend>${TT[k]}</legend>`;S[k].forEach((r,i)=>{h+='<div class="row">'+LD[k].map(([f,l,t])=>t?`<label>${l}${r[f]?" ✓":""}</label><input type="file" accept="image/*" data-img="${k}" data-i="${i}" data-f="${f}">`:`<input data-l="${k}" data-i="${i}" data-f="${f}" placeholder="${l}" value="${esc(r[f])}">`).join("")+`<button class="btn rm" data-rm="${k}" data-i="${i}">삭제</button></div>`});h+=`<button class="btn" data-add="${k}">+ 행 추가</button></fieldset>`});
+ ed.innerHTML=h;
+ document.getElementById("fi").onchange=e=>{const f=e.target.files[0];if(!f)return;shrink(f,1000,d=>{S.img=d;save();draw()})};
+}
+const shrink=(file,max,cb)=>{const r=new FileReader();r.onload=()=>{const i=new Image();i.onload=()=>{const k=Math.min(1,max/Math.max(i.width,i.height)),c=document.createElement("canvas");c.width=Math.round(i.width*k);c.height=Math.round(i.height*k);c.getContext("2d").drawImage(i,0,0,c.width,c.height);cb(c.toDataURL("image/webp",.9))};i.onerror=()=>cb(r.result);i.src=r.result};r.readAsDataURL(file)};
+const ruby=s=>esc(s).replace(/([\u3400-\u9fff\uf900-\ufaff々〆ヶ]+)[(（]([\u3040-\u30ffー・ ]+)[)）]/g,"<ruby>$1<rt>$2</rt></ruby>");
+const yt=u=>{const m=(u||"").match(/(?:v=|youtu\.be\/|embed\/|shorts\/)([\w-]{11})/);return m?`<iframe class="vid" src="https://www.youtube-nocookie.com/embed/${m[1]}" allowfullscreen loading="lazy"></iframe>`:/^https?:/.test(u||"")?`<a class="lk" href="${esc(u)}">${esc(u)}</a>`:""};
+const vid=()=>(S.v1?`<div>${yt(S.v1)}</div>`:"")+(S.v2?`<details><summary>이전 자기소개 펼치기 · 접기</summary><div>${yt(S.v2)}</div></details>`:"");
+const fnl=()=>FN.length?`<div class="fnl">${FN.map((t,i)=>`<div id="fn${i+1}"><a class="lk" href="#r${i+1}">[${i+1}]</a> ${rich(t)}</div>`).join("")}</div>`:"";
+const tb=(h,rows)=>`<div class="sc"><table class="t2"><tr>${h.map(x=>`<th>${x}</th>`).join("")}</tr>${rows}</table></div>`;
+function spec(k){const R=S[k].filter(r=>Object.values(r).some(v=>v));
+ if(k==="acts")return tb(["구분","스토리","수록곡","카드"],R.map(r=>`<tr><td>${fmt(r.t)}</td><td>${fmt(r.n)}</td><td>${fmt(r.s)}</td><td>${fmt(r.k)}</td></tr>`).join(""));
+ if(k==="lines")return`<details open><summary>펼치기 · 접기</summary><div>`+tb(["조건","연도","대사"],R.map(r=>`<tr><td>${fmt(r.t)}</td><td>${fmt(r.y)}</td><td>${fmt(r.n)}</td></tr>`).join(""))+`</div></details>`;
+ return`<div class="gal">${R.map(r=>`<figure>${r.i?`<img src="${r.i}" alt="">`:""}<figcaption>${fmt(r.n)}</figcaption></figure>`).join("")}</div>`}
+const mk=k=>LD[k]?S[k].filter(r=>Object.values(r).some(v=>v)).map(r=>"|| "+LD[k].filter(f=>!f[2]).map(f=>r[f[0]]).join(" || ")+" ||").join("\n"):S[k];
+function draw(){
+ const col=S.color||"#ff6699";document.documentElement.style.setProperty("--c",col);
+ FN=[];const ib=INFO.map(([k,l])=>S["i_"+k]?`<div><span>${l}</span><span>${fmt(S["i_"+k])}${S["i_"+k+"o"]?`<details class="old"><summary>[ 진급 이전 ]</summary><div>${fmt(S["i_"+k+"o"])}</div></details>`:""}</span></div>`:"").join("");let n1=0,toc="",body="";
+ TREE.forEach(n=>{if(!vis(n))return;n1++;toc+=`<div><a href="#s${n1}"><i>${n1}.</i>${n.t}</a></div>`;body+=`<h2 id="s${n1}"><i>${n1}.</i>${n.t}</h2>`;
+  if(n.c){let n2=0;n.c.forEach(c=>{if(!vis(c))return;n2++;const id=`s${n1}_${n2}`;toc+=`<div class="l2"><a href="#${id}"><i>${n1}.${n2}.</i>${c.t}</a></div>`;body+=`<h3 id="${id}"><i>${n1}.${n2}.</i>${c.t}</h3>${LD[c.k]?spec(c.k):`<p>${fmt(S[c.k])}</p>`}`})}
+  else if(n.k==="ov"){body+=(S.slogan?`<div class="q"><b>“${fmt(S.slogan)}”</b></div>`:"")+vid()+`<p>${fmt(S.ov)}</p>`}
+  else if(n.k==="rel"){S.rel.filter(r=>r.n).forEach(r=>{body+=`<div class="card"><h4>인물 관계</h4><div class="nmr">${esc(S.kr)} → ${fmt(r.n)}</div>${[["a",5],["b",26],["c",46]].map(([f,k])=>r[f]?`<p>${fmt(r[f])}<span class="pill">인연 랭크 ${k}</span></p>`:"").join("")}</div>`})}
+  else if(n.k==="nick"){body+=`<div class="sc"><table class="t2"><tr><th>인물</th><th>부르는 호칭</th><th>불리는 호칭</th></tr><tr><td>1인칭</td><td colspan="2">${fmt(S.first||"나(私)")}</td></tr>${S.nick.filter(r=>r.n).map(r=>`<tr><td>${fmt(r.n)}</td><td>${fmt(r.x)}</td><td>${fmt(r.y)}</td></tr>`).join("")}</table></div>`}
+  else if(n.k==="q"){S.q.split("\n").filter(x=>x.trim()).forEach(l=>{const [a,b]=l.split("||");body+=`<div class="q">${fmt(a.trim())}${b?`<small>${fmt(b.trim())}</small>`:""}</div>`})}
+  else body+=LD[n.k]?spec(n.k):`<p>${fmt(S[n.k])}</p>`});
+ 
+ doc.innerHTML=`<div class="top"><small>프로젝트 세카이 컬러풀 스테이지! feat. 하츠네 미쿠</small><b>캐릭터</b></div>
+ <div class="head"><div class="hn"><div class="jp">${ruby(S.jp)}${S.ro?" | "+esc(S.ro):""}</div><h1 class="nm">${esc(S.kr)||"이름을 입력하세요"}</h1></div>
+ <div class="side">${S.img?`<div class="fig"><img src="${S.img}" alt="" style="height:${S.imgh||420}px;max-width:100%;${S.imgfit==="cover"?"width:100%;object-fit:cover;object-position:top":"object-fit:contain"}"></div>`:""}
+ <div class="ib"><div><span>소속 유닛</span><span>${esc(S.unit)}</span></div>${ib}<div><span>이미지 컬러</span><span><i class="sw"></i>${esc(col.toUpperCase())}${S.cn?" / "+fmt(S.cn):""}</span></div></div></div>
+ ${n1?`<div class="toc"><b>목차</b>${toc}</div></div>${body}${fnl()}`:'</div><div class="empty">왼쪽 양식을 채우면 문서가 만들어져요.</div>'}`;
+}
+function mark(){
+ let o="",a=0;
+ TREE.forEach(n=>{if(!has(n))return;a++;o+=`== ${n.t} ==\n`;
+  if(n.c)n.c.forEach(c=>{if(has(c))o+=`=== ${c.t} ===\n${mk(c.k)}\n\n`});
+  else if(n.k==="rel")S.rel.filter(r=>r.n).forEach(r=>{o+=` * ${r.n}\n   * ${[r.a,r.b,r.c].filter(Boolean).join(" / ")}\n`});
+  else if(n.k==="nick"){o+="||<tablealign=center> 인물 || 부르는 호칭 || 불리는 호칭 ||\n";S.nick.filter(r=>r.n).forEach(r=>o+=`|| ${r.n} || ${r.x} || ${r.y} ||\n`)}
+  else if(n.k==="q")S.q.split("\n").filter(x=>x.trim()).forEach(l=>{const[x,y]=l.split("||");o+=`> ${x.trim()}${y?" - "+y.trim():""}\n`});
+  else o+=`${mk(n.k)}\n`;o+="\n"});
+ return o.replace(/\[\*(.+?)\]/g,"[* $1]").replace(/\{\{yt:(?:.*?(?:v=|youtu\.be\/|embed\/|shorts\/))([\w-]{11}).*?\}\}/g,"[youtube($1)]").replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g,"[[$2|$1]]").replace(/\*\*(.+?)\*\*/g,"'''$1'''").replace(/\*(.+?)\*/g,"''$1''").replace(/==(?:\{#[0-9a-fA-F]+\})?(.+?)==/g,"$1").replace(/\[\[(.+?)\]\]/g,"[[$1]]");
+}
+const ed=document.getElementById("ed"),doc=document.getElementById("doc");
+ed.addEventListener("input",e=>{const t=e.target;if(t.dataset.k){S[t.dataset.k]=t.type==="checkbox"?t.checked:t.value;if(t.dataset.k==="unit"&&UN[t.value]){S.color=UN[t.value];ed.querySelector("[data-k=color]").value=S.color}}else if(t.dataset.l)S[t.dataset.l][t.dataset.i][t.dataset.f]=t.value;save();draw()});
+ed.addEventListener("click",e=>{const t=e.target;if(t.dataset.add){S[t.dataset.add].push(blank(t.dataset.add));save();form()}if(t.dataset.rm){S[t.dataset.rm].splice(+t.dataset.i,1);if(!S[t.dataset.rm].length)S[t.dataset.rm].push(blank(t.dataset.rm));save();form();draw()}});
+let LF=null,HC="#fff176";ed.addEventListener("input",e=>{if(e.target.id==="hc")HC=e.target.value});const FX={b:["**","**"],i:["*","*"],u:["__","__"],s:["~~","~~"],h:["==","=="],f:["[*","]"]};
+ed.addEventListener("focusin",e=>{const t=e.target;if((t.tagName==="TEXTAREA"||t.tagName==="INPUT")&&(t.dataset.k||t.dataset.l)&&t.type!=="color"&&t.type!=="checkbox"&&t.type!=="range")LF=t});
+["mousedown","pointerdown"].forEach(ev=>ed.addEventListener(ev,e=>{if(e.target.dataset&&e.target.dataset.fx)e.preventDefault()}));
+ed.addEventListener("click",e=>{const k=e.target.dataset.fx;if(!k)return;const t=LF;if(!t||!document.contains(t)){alert("서식을 넣을 입력 칸을 먼저 선택하세요.");return}
+ const a=t.selectionStart,b=t.selectionEnd,v=t.value;let sel=v.slice(a,b),L,R;
+ if(k==="a"){const u=prompt("링크 주소 (https://...)");if(!u)return;L="[";R="]("+u+")";sel=sel||"링크 텍스트"}
+ else if(k==="v"){if(/^https?:\/\//.test(sel.trim())){L="{{yt:";R="}}";sel=sel.trim()}else{const u=prompt("유튜브 주소 (https://...)");if(!u)return;L=sel+"{{yt:";R="}}";sel=u.trim()}}
+ else{[L,R]=FX[k];if(k==="h")L="=={"+document.getElementById("hc").value+"}";sel=sel||(k==="f"?"각주 내용":"텍스트")}
+ t.value=v.slice(0,a)+L+sel+R+v.slice(b);t.focus();t.setSelectionRange(a+L.length,a+L.length+sel.length);t.dispatchEvent(new Event("input",{bubbles:true}))});
+ed.addEventListener("change",e=>{const t=e.target,k=t.dataset.img;if(!k||!t.files[0])return;shrink(t.files[0],500,d=>{S[k][+t.dataset.i][t.dataset.f]=d;save();form();draw()})});
+b1.onclick=()=>{document.body.classList.remove("pvm");b1.classList.add("on");b2.classList.remove("on")};
+b2.onclick=()=>{document.body.classList.add("pvm");b2.classList.add("on");b1.classList.remove("on")};
+const cpy=async h=>{try{await navigator.clipboard.writeText(h)}catch(e){const t=document.createElement("textarea");t.value=h;document.body.appendChild(t);t.select();document.execCommand("copy");t.remove()}xc.textContent="복사됨";setTimeout(()=>xc.textContent="HTML 복사",1500)};
+const xp=copy=>{draw();const h=`<!doctype html><html lang="ko" style="--c:${S.color}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${esc(S.kr)||"문서"}</title><style>${document.querySelector("style").textContent}body{padding:12px}.doc{max-width:900px;margin:0 auto}</style></head><body><div class="doc">${doc.innerHTML}</div></body></html>`;if(copy){cpy(h);return}const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([h],{type:"text/html"}));a.download=(S.kr||"document")+".html";document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1000)};
+xh.onclick=()=>xp(false);xc.onclick=()=>xp(true);
+cp.onclick=async()=>{const m=mark();try{await navigator.clipboard.writeText(m);cp.textContent="복사됨"}catch(e){prompt("복사하세요",m)}setTimeout(()=>cp.textContent="나무마크",1500)};
+rs.onclick=()=>{if(confirm("입력한 내용을 모두 지울까요?")){S=JSON.parse(JSON.stringify(DEF));save();form();draw()}};
+form();draw();
+</script></body></html>
